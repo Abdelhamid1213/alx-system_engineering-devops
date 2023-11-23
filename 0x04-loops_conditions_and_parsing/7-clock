@@ -13,7 +13,7 @@ do
 
     while [ $minute -le 59 ]; 
     do
-        echo $minute
+        echo "$minute"
         ((minute++))
     done
 
