@@ -1,3 +1,4 @@
+#!/usr/bin/pup
 # Install a spesific version of Flask (2.1.0)
 
 package {'flask':
