@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # This shell script installs and configures the Nginx web server,
 # and outputs "Hello World!" on the default web page.
 
