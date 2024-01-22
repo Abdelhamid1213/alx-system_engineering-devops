@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# This shell script installs and configures the Nginx web server,
+# and outputs "Hello World!" on the default web page.
+
+# Ensure the script runs with sudo privileges
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this script with sudo."
+  exit 1
+fi
+
+# Update package list
+apt update
+
+# Install Nginx
+apt install nginx -y
+
+# Change to Nginx default web root
+cd /var/www/html || exit
+
+# Remove existing content
+rm -rf ./*
+
+# Create a simple "Hello World!" page
+echo "Hello World!" >> index.html
+
+# Restart Nginx
+service nginx restart
