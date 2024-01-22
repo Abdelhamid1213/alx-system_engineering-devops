@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# This script installs and configures Nginx web server with a redirection rule to redirect a specific URL to a YouTube video.
+
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this script with sudo."
+  exit 1
+fi
+
+apt update -y
+
+apt install nginx -y
+
+cd /var/www/html || exit
+
+rm -rf ./*
+
+echo "Hello World!" >> index.html
+
+CONFIG=\
+"server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name malloc.tech www.malloc.tech;
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+	if (\$request_filename ~ redirect_me){
+		rewrite ^ https://www.youtube.com/watch?v=xvFZjo5PgG0 permanent;
+	}
+}"
+
+bash -c "echo -e '$CONFIG' > /etc/nginx/sites-enabled/default"
+
+service nginx restart

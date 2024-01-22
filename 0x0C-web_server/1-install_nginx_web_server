@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Update package list
-apt update
+apt update -y
 
 # Install Nginx
 apt install nginx -y
