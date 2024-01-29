@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Install and configure HAproxy on your lb-01 server.
+
+# Ensure the script runs with sudo privileges
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this script with sudo."
+  exit 1
+fi
+
+apt update -y
+apt upgrade -y
+apt install haproxy -y
+
+config='
+frontend myfrontend
+    bind \*:80
+    default_backend mybackend
+
+backend mybackend
+    balance roundrobin
+    server web-01 52.23.213.16:80 check
+    server web-02 18.204.16.235:80 check
+'
+# shellcheck disable=SC1003
+sed -i '$a\'"${config//$'\n'/\\n}" /etc/haproxy/haproxy.cfg
+
+service haproxy restart
