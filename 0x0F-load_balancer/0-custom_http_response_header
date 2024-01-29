@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# This script is used to customize the HTTP response header.
+# It allows the user to add custom headers to the HTTP response.
+# The script can be used in conjunction with a load balancer to modify the response headers sent to clients.
+# The custom headers can be used for various purposes such as adding security headers, caching headers, or tracking headers.
+
+
+# Ensure the script runs with sudo privileges
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run this script with sudo."
+  exit 1
+fi
+
+# Modify NGINX config
+line="add_header X-Served-By \$hostname;"
+conf="/etc/nginx/sites-enabled/default"
+sed -i '$s/}$/\t'"$line"'\n}/' "$conf"
+
+# Restart NGINX
+service nginx restart
