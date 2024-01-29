@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-# This script is used to customize the HTTP response header.
-# It allows the user to add custom headers to the HTTP response.
-# The script can be used in conjunction with a load balancer to modify the response headers sent to clients.
-# The custom headers can be used for various purposes such as adding security headers, caching headers, or tracking headers.
-
+# Script configures NGINX server with a custom header
 
 # Ensure the script runs with sudo privileges
 if [ "$EUID" -ne 0 ]; then
@@ -11,10 +7,39 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Modify NGINX config
-line="add_header X-Served-By \$hostname;"
-conf="/etc/nginx/sites-enabled/default"
-sed -i '$s/}$/\t'"$line"'\n}/' "$conf"
+apt update -y
 
-# Restart NGINX
+apt install nginx -y
+
+cd /var/www/html || exit
+
+rm -rf ./*
+
+echo "Hello World!" >> index.html
+echo "Ceci n'est pas une page" >> 404.html
+
+CONFIG=\
+"server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name malloc.tech www.malloc.tech;
+    add_header X-Served-By \$hostname;
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+	if (\$request_filename ~ redirect_me){
+		rewrite ^ https://www.youtube.com/watch?v=xvFZjo5PgG0 permanent;
+	}
+    error_page 404 /404.html;
+
+    location = /404.html {
+        root /var/www/html;
+        internal;
+    }
+}"
+
+bash -c "echo -e '$CONFIG' > /etc/nginx/sites-enabled/default"
+
 service nginx restart
