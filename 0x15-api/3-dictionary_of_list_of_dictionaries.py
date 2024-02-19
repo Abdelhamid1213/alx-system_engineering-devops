@@ -24,8 +24,9 @@ if __name__ == "__main__":
 
     for employee_id in unique_employee_ids:
         tasks = requests.get(f'{route}/todos?userId={employee_id}').json()
-        username = requests.get(f'{route}/users/\
-                                {employee_id}').json()['username']
+        username = requests.get(
+            f'{route}/users/{employee_id}'
+        ).json()['username']
         data[employee_id] = []
         for task in tasks:
             data[employee_id].append({"task": task['title'],
