@@ -6,7 +6,7 @@ import requests
 def recurse(subreddit, after=None, count=0):
     """Returns a generator yielding titles of all hot posts on a given
  subreddit."""
-    url = f"https://old.reddit.com/r/{subreddit}/hot/.json"
+    url = f"https://www.reddit.com/r/{subreddit}/hot/.json"
     headers = {"User-Agent": "ubuntu:alx/1.0"}
     params = {
         "after": after,
