@@ -4,7 +4,6 @@ import requests
 
 
 http_proxy = "http://173.249.29.243:9123"
-
 proxies = {"http": http_proxy}
 
 
@@ -20,5 +19,3 @@ def top_ten(subreddit):
     else:
         for post in r.json()['data']['children']:
             print(post['data']['title'])
-
-top_ten('linux')
