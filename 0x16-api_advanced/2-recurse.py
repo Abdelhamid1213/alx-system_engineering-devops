@@ -2,8 +2,10 @@
 """Function to query a list of all hot posts on a given Reddit subreddit."""
 import requests
 
+
 def recurse(subreddit, after=None, count=0):
-    """Returns a generator yielding titles of all hot posts on a given subreddit."""
+    """Returns a generator yielding titles of all hot posts on a given
+ subreddit."""
     url = f"https://www.reddit.com/r/{subreddit}/hot/.json"
     headers = {"User-Agent": "ubuntu:alx/1.0"}
     params = {
@@ -13,7 +15,8 @@ def recurse(subreddit, after=None, count=0):
     }
     with requests.Session() as session:
         while True:
-            response = session.get(url, headers=headers, params=params, allow_redirects=False)
+            response = session.get(url, headers=headers, params=params,
+                                   allow_redirects=False)
             if response.status_code == 404:
                 return None
 
