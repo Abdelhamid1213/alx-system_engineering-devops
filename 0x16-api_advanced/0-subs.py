@@ -5,8 +5,10 @@ import requests
 
 
 def number_of_subscribers(subreddit):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) \
-AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'}
+    """Return the total number of subscribers on a given subreddit."""
+    headers = {
+        "User-Agent": "0-subs/1.0"
+    }
     url = f'https://www.reddit.com/r/{subreddit}/about.json'
     r = requests.get(url=url, headers=headers, allow_redirects=False).json()
     return 0 if 'error' in r else r['data']['subscribers']
