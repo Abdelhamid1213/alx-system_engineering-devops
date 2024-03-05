@@ -3,8 +3,7 @@
 import requests
 
 
-http_proxy = "http://173.249.29.243:9123"
-proxies = {"http": http_proxy}
+proxies = {"http": "http://173.249.29.243:9123"}
 
 
 def top_ten(subreddit):
