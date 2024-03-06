@@ -1,18 +1,8 @@
 # automated puppet fix (to find out why Apache is returning a 500 error)
 
 file { '/var/www/html/wp-settings.php':
-  ensure => present,
-  require => Exec['VerifyExtension'],
-}
-
-exec { 'VerifyExtension':
-  command => 'grep -q ".phpp" /var/www/html/wp-settings.php',
-  unless => 'test $? == 0', # Only run if incorrect extension is found
-  provider => shell,
-}
-
-exec { 'FixWordpressSite':
-  command => 'sudo sed -i "s/.phpp/.php/" /var/www/html/wp-settings.php',
-  provider => shell,
-  require => Exec['VerifyExtension'],
+  ensure  => present,
+  replace => 'true',
+  content => file('/var/www/html/wp-settings.php').content.gsub('.phpp', '.php'),
+  notify  => Service['apache2'],
 }
